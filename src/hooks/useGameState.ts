@@ -5,7 +5,6 @@ import { STORAGE_KEYS, WORD_LENGTH, MAX_GUESSES } from '@/lib/constants'
 import { 
   getInitialGameState, 
   getInitialStats, 
-  checkGuess, 
   isValidGuess, 
   isGameWon,
   updateStats,

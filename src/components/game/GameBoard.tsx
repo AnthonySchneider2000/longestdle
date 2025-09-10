@@ -31,21 +31,16 @@ export function GameBoard({ gameState, onInvalidGuess }: GameBoardProps) {
     }
   }, [gameState.currentRow, gameState.guesses])
 
-  // Handle shake animation for invalid guesses
-  const triggerShake = () => {
-    setShakingRow(gameState.currentRow)
-    const timer = setTimeout(() => {
-      setShakingRow(null)
-    }, 500)
-    return () => clearTimeout(timer)
-  }
-
   // Trigger shake when invalid guess is attempted
   useEffect(() => {
     if (onInvalidGuess) {
-      // This would be called from parent when invalid guess is detected
+      setShakingRow(gameState.currentRow)
+      const timer = setTimeout(() => {
+        setShakingRow(null)
+      }, 500)
+      return () => clearTimeout(timer)
     }
-  }, [onInvalidGuess])
+  }, [onInvalidGuess, gameState.currentRow])
 
   const rows = []
   for (let i = 0; i < MAX_GUESSES; i++) {

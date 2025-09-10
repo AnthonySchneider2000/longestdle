@@ -8,7 +8,6 @@ import { Keyboard } from '@/components/game/Keyboard'
 import { useGameState } from '@/hooks/useGameState'
 import { useKeyboard } from '@/hooks/useKeyboard'
 import { generateShareText } from '@/lib/gameLogic'
-import { TARGET_WORD } from '@/lib/constants'
 
 export default function Home() {
   const {
@@ -17,7 +16,6 @@ export default function Home() {
     addLetter,
     removeLetter,
     submitGuess,
-    resetGame,
     getKeyboardLetterStatus,
     canSubmit,
     canAddLetter,
@@ -44,7 +42,7 @@ export default function Home() {
           title: 'Longestdle',
           text: shareText
         })
-      } catch (error) {
+      } catch {
         // Fallback to clipboard
         await navigator.clipboard.writeText(shareText)
         alert('Results copied to clipboard!')
@@ -91,7 +89,7 @@ export default function Home() {
                   The word was <strong>pneumonoultramicroscopicsilicovolcanoconiosis</strong>
                 </p>
                 <p className="text-sm text-gray-600 mt-2">
-                  (It's a lung disease caused by inhaling very fine silicate or quartz dust)
+                  (It&apos;s a lung disease caused by inhaling very fine silicate or quartz dust)
                 </p>
               </div>
             )}

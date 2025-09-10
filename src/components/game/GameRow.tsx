@@ -13,7 +13,7 @@ interface GameRowProps {
   shake?: boolean
 }
 
-export function GameRow({ guess, isSubmitted, isCurrentRow, isRevealing, shake = false }: GameRowProps) {
+export function GameRow({ guess, isSubmitted, isRevealing, shake = false }: GameRowProps) {
   const tiles = []
   const letterStatuses = isSubmitted ? checkGuess(guess) : []
 
