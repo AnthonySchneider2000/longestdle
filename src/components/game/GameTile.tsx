@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { LetterStatus } from '@/types/game'
-import { COLORS } from '@/lib/constants'
 
 interface GameTileProps {
   letter: string
@@ -14,19 +13,19 @@ interface GameTileProps {
 export function GameTile({ letter, status, animationDelay = 0, isRevealing = false }: GameTileProps) {
   const getBackgroundColor = () => {
     switch (status) {
-      case 'correct': return COLORS.correct
-      case 'present': return COLORS.present
-      case 'absent': return COLORS.absent
-      default: return COLORS.empty
+      case 'correct': return 'var(--color-correct)'
+      case 'present': return 'var(--color-present)'
+      case 'absent': return 'var(--color-absent)'
+      default: return 'var(--color-empty)'
     }
   }
 
   const getBorderColor = () => {
-    return status === 'empty' ? COLORS.border : getBackgroundColor()
+    return status === 'empty' ? 'var(--color-border)' : getBackgroundColor()
   }
 
   const getTextColor = () => {
-    return status === 'empty' ? COLORS.text : '#ffffff'
+    return status === 'empty' ? 'var(--color-text)' : '#ffffff'
   }
 
   return (
@@ -44,9 +43,9 @@ export function GameTile({ letter, status, animationDelay = 0, isRevealing = fal
         isRevealing
           ? {
               rotateX: [0, 90, 0],
-              backgroundColor: [COLORS.empty, COLORS.empty, getBackgroundColor()],
-              borderColor: [COLORS.border, COLORS.border, getBorderColor()],
-              color: [COLORS.text, COLORS.text, getTextColor()]
+              backgroundColor: ['var(--color-empty)', 'var(--color-empty)', getBackgroundColor()],
+              borderColor: ['var(--color-border)', 'var(--color-border)', getBorderColor()],
+              color: ['var(--color-text)', 'var(--color-text)', getTextColor()]
             }
           : {}
       }

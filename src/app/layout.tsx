@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import "./globals.css";
 
 export default function RootLayout({
@@ -19,7 +20,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <QueryClientProvider client={queryClient}>
-          {children}
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
         </QueryClientProvider>
       </body>
     </html>

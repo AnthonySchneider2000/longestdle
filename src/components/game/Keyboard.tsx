@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Delete, CornerDownLeft } from 'lucide-react'
 import { LetterStatus } from '@/types/game'
-import { KEYBOARD_ROWS, COLORS } from '@/lib/constants'
+import { KEYBOARD_ROWS } from '@/lib/constants'
 
 interface KeyboardProps {
   onKeyPress: (key: string) => void
@@ -27,8 +27,9 @@ export function Keyboard({
   const getKeyStyle = (key: string) => {
     if (key === 'ENTER' || key === 'BACKSPACE') {
       return {
-        backgroundColor: COLORS.border,
-        color: COLORS.text,
+        backgroundColor: 'var(--color-empty)',
+        color: 'var(--color-text)',
+        border: `1px solid var(--color-border)`,
         opacity: (key === 'ENTER' && !canSubmit) || (key === 'BACKSPACE' && !canRemoveLetter) ? 0.5 : 1
       }
     }
@@ -36,15 +37,16 @@ export function Keyboard({
     const status = getLetterStatus(key)
     switch (status) {
       case 'correct':
-        return { backgroundColor: COLORS.correct, color: '#ffffff' }
+        return { backgroundColor: 'var(--color-correct)', color: '#ffffff' }
       case 'present':
-        return { backgroundColor: COLORS.present, color: '#ffffff' }
+        return { backgroundColor: 'var(--color-present)', color: '#ffffff' }
       case 'absent':
-        return { backgroundColor: COLORS.absent, color: '#ffffff' }
+        return { backgroundColor: 'var(--color-absent)', color: '#ffffff' }
       default:
         return { 
-          backgroundColor: COLORS.border, 
-          color: COLORS.text,
+          backgroundColor: 'var(--color-empty)', 
+          color: 'var(--color-text)',
+          border: `1px solid var(--color-border)`,
           opacity: !canAddLetter ? 0.5 : 1
         }
     }

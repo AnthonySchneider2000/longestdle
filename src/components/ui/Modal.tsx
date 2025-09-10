@@ -29,12 +29,24 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-4 border-b">
-                <h2 className="text-xl font-bold">{title}</h2>
+            <div 
+              className="rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto"
+              style={{ backgroundColor: 'var(--color-surface)' }}
+            >
+              <div 
+                className="flex items-center justify-between p-4 border-b"
+                style={{ borderColor: 'var(--color-border)' }}
+              >
+                <h2 
+                  className="text-xl font-bold"
+                  style={{ color: 'var(--color-text)' }}
+                >
+                  {title}
+                </h2>
                 <button
                   onClick={onClose}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-1 hover:opacity-70 rounded-full transition-opacity"
+                  style={{ color: 'var(--color-text)' }}
                 >
                   <X size={20} />
                 </button>
