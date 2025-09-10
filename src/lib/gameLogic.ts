@@ -86,7 +86,7 @@ export function generateShareText(gameState: GameState): string {
     }
   }
   
-  shareText += '\nhttps://longestdle.com'
+  shareText += '\nhttps://longestdle.vercel.app'
   return shareText
 }
 
