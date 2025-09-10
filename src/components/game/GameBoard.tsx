@@ -68,13 +68,14 @@ export function GameBoard({ gameState, onInvalidGuess }: GameBoardProps) {
   }
 
   return (
-    <div className="w-full max-w-full overflow-x-auto touch-scroll hide-scrollbar">
+    <div className="w-full h-full flex items-center justify-evenly max-w-full overflow-hidden">
       <div 
-        className="grid gap-[2px] xs:gap-1 sm:gap-2 md:gap-3 mx-auto"
+        className="grid gap-[1px] xs:gap-[2px] sm:gap-1 md:gap-2 lg:gap-3"
         style={{
-          width: 'fit-content',
-          maxWidth: '95vw',
-          margin: '0 auto'
+          gridTemplateRows: `repeat(${MAX_GUESSES}, 1fr)`,
+          width: '95vw',
+          height: `min(60vh, ${95 / WORD_LENGTH * MAX_GUESSES}vw)`,
+          maxWidth: '95vw'
         }}
       >
         {rows}

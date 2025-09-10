@@ -37,8 +37,8 @@ export function GameRow({ guess, isSubmitted, isCurrentRow, isRevealing, shake =
     <motion.div
       className="grid w-full gap-[1px] xs:gap-[2px] sm:gap-1 md:gap-2"
       style={{
-        gridTemplateColumns: `repeat(${WORD_LENGTH}, minmax(8px, 1fr))`,
-        maxWidth: '95vw'
+        gridTemplateColumns: `repeat(${WORD_LENGTH}, 1fr)`,
+        height: '100%'
       }}
       animate={shake ? { x: [-5, 5, -5, 5, 0] } : {}}
       transition={{

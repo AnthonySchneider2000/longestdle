@@ -62,7 +62,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="h-screen bg-white flex flex-col overflow-hidden">
       <Header
         onHowToPlay={() => setShowHowToPlay(true)}
         onStats={() => setShowStats(true)}
@@ -70,8 +70,8 @@ export default function Home() {
         onShare={handleShare}
       />
 
-      <main className="flex-1 flex flex-col items-center justify-center py-8 max-w-full mx-auto w-full">
-        <div className="w-full mb-8 px-2">
+      <main className="flex-1 flex flex-col items-center justify-between py-4 max-w-full mx-auto w-full min-h-0">
+        <div className="w-full flex-1 flex items-center justify-center min-h-0">
           <GameBoard gameState={gameState} />
         </div>
 
@@ -95,12 +95,6 @@ export default function Home() {
                 </p>
               </div>
             )}
-            <button
-              onClick={resetGame}
-              className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Play Again
-            </button>
           </div>
         )}
 

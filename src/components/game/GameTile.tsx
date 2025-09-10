@@ -31,13 +31,13 @@ export function GameTile({ letter, status, animationDelay = 0, isRevealing = fal
 
   return (
     <motion.div
-      className="relative w-full aspect-square border-2 flex items-center justify-center font-bold select-none text-[0.4rem] xs:text-[0.5rem] sm:text-[0.6rem] md:text-xs lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl"
+      className="game-tile relative w-full aspect-square border flex items-center justify-center font-bold select-none text-[0.3rem] xs:text-[0.4rem] sm:text-[0.5rem] md:text-[0.6rem] lg:text-xs xl:text-sm 2xl:text-base"
       style={{
         backgroundColor: getBackgroundColor(),
         borderColor: getBorderColor(),
         color: getTextColor(),
-        minWidth: '8px',
-        minHeight: '8px'
+        minWidth: '4px',
+        minHeight: '4px'
       }}
       initial={false}
       animate={

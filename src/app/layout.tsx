@@ -1,19 +1,8 @@
 'use client'
 
-import { Geist, Geist_Mono } from "next/font/google";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export default function RootLayout({
   children,
@@ -28,9 +17,7 @@ export default function RootLayout({
         <title>Longestdle - The 45-letter word game</title>
         <meta name="description" content="Can you guess the longest word in English? Play Longestdle, the 45-letter word guessing game!" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>
