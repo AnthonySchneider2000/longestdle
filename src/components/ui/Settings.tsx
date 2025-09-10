@@ -9,8 +9,7 @@ export function Settings() {
     toggleDarkMode, 
     setColorBlindMode, 
     resetTheme,
-    isDarkMode,
-    isColorBlindMode
+    isDarkMode
   } = useThemeContext()
 
   const colorBlindOptions: { value: ColorBlindMode; label: string; description: string }[] = [

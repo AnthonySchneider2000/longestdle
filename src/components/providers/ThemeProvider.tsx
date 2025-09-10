@@ -6,7 +6,17 @@ import { ThemeMode, ColorBlindMode } from '@/types/game'
 
 interface ThemeContextType {
   themeSettings: { mode: ThemeMode; colorBlindMode: ColorBlindMode }
-  currentPalette: any
+  currentPalette: {
+    correct: string
+    present: string
+    absent: string
+    empty: string
+    border: string
+    text: string
+    background: string
+    surface: string
+    textSecondary: string
+  }
   toggleDarkMode: () => void
   setColorBlindMode: (mode: ColorBlindMode) => void
   resetTheme: () => void
