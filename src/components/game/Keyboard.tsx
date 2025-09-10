@@ -61,9 +61,9 @@ export function Keyboard({
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-2">
+    <div className="w-full max-w-full mx-auto px-1 sm:px-2">
       {KEYBOARD_ROWS.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center gap-1 mb-2">
+        <div key={rowIndex} className="flex justify-center gap-[2px] xs:gap-1 sm:gap-2 mb-1 xs:mb-2">
           {row.map((key) => {
             const isSpecialKey = key === 'ENTER' || key === 'BACKSPACE'
             const style = getKeyStyle(key)
@@ -72,11 +72,17 @@ export function Keyboard({
               <motion.button
                 key={key}
                 className={`
-                  ${isSpecialKey ? 'px-3 min-w-[60px]' : 'px-2 min-w-[40px]'} 
-                  py-3 rounded font-bold text-sm sm:text-base
+                  keyboard-key ${isSpecialKey ? 'keyboard-key-special' : ''}
+                  rounded font-bold 
                   flex items-center justify-center
                   transition-all duration-150
                   active:scale-95
+                  text-[10px] xs:text-xs sm:text-sm md:text-base
+                  min-w-[28px] xs:min-w-[32px] sm:min-w-[40px] md:min-w-[48px]
+                  ${isSpecialKey ? 'min-w-[42px] xs:min-w-[48px] sm:min-w-[60px] md:min-w-[72px]' : ''}
+                  px-1 xs:px-2 sm:px-3
+                  py-2 xs:py-3
+                  h-8 xs:h-10 sm:h-12 md:h-14
                 `}
                 style={style}
                 onClick={() => handleKeyClick(key)}
@@ -88,9 +94,9 @@ export function Keyboard({
                 }
               >
                 {key === 'BACKSPACE' ? (
-                  <Delete size={18} />
+                  <Delete className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5" />
                 ) : key === 'ENTER' ? (
-                  <CornerDownLeft size={18} />
+                  <CornerDownLeft className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5" />
                 ) : (
                   key
                 )}
