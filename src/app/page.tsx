@@ -1,103 +1,218 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { Header } from '@/components/ui/Header'
+import { Modal } from '@/components/ui/Modal'
+import { GameBoard } from '@/components/game/GameBoard'
+import { Keyboard } from '@/components/game/Keyboard'
+import { useGameState } from '@/hooks/useGameState'
+import { useKeyboard } from '@/hooks/useKeyboard'
+import { generateShareText } from '@/lib/gameLogic'
+import { TARGET_WORD } from '@/lib/constants'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const {
+    gameState,
+    gameStats,
+    addLetter,
+    removeLetter,
+    submitGuess,
+    resetGame,
+    getKeyboardLetterStatus,
+    canSubmit,
+    canAddLetter,
+    canRemoveLetter
+  } = useGameState()
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [showHowToPlay, setShowHowToPlay] = useState(false)
+  const [showStats, setShowStats] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+
+  useKeyboard({
+    onKeyPress: addLetter,
+    onEnter: submitGuess,
+    onBackspace: removeLetter,
+    disabled: gameState.gameStatus !== 'playing'
+  })
+
+  const handleShare = async () => {
+    const shareText = generateShareText(gameState)
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Longestdle',
+          text: shareText
+        })
+      } catch (error) {
+        // Fallback to clipboard
+        await navigator.clipboard.writeText(shareText)
+        alert('Results copied to clipboard!')
+      }
+    } else {
+      // Fallback to clipboard
+      await navigator.clipboard.writeText(shareText)
+      alert('Results copied to clipboard!')
+    }
+  }
+
+  const getWinPercentage = () => {
+    if (gameStats.gamesPlayed === 0) return 0
+    return Math.round((gameStats.gamesWon / gameStats.gamesPlayed) * 100)
+  }
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col">
+      <Header
+        onHowToPlay={() => setShowHowToPlay(true)}
+        onStats={() => setShowStats(true)}
+        onSettings={() => setShowSettings(true)}
+        onShare={handleShare}
+      />
+
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-full mx-auto w-full">
+        <div className="w-full mb-8">
+          <GameBoard gameState={gameState} />
+        </div>
+
+        {gameState.gameStatus !== 'playing' && (
+          <div className="text-center mb-6 p-4 bg-gray-100 rounded-lg">
+            {gameState.gameStatus === 'won' ? (
+              <div>
+                <h2 className="text-2xl font-bold text-green-600 mb-2">Congratulations! 🎉</h2>
+                <p className="text-gray-700">
+                  You guessed <strong>pneumonoultramicroscopicsilicovolcanoconiosis</strong> in {gameState.currentRow} {gameState.currentRow === 1 ? 'try' : 'tries'}!
+                </p>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-2xl font-bold text-red-600 mb-2">Game Over 😔</h2>
+                <p className="text-gray-700">
+                  The word was <strong>pneumonoultramicroscopicsilicovolcanoconiosis</strong>
+                </p>
+                <p className="text-sm text-gray-600 mt-2">
+                  (It's a lung disease caused by inhaling very fine silicate or quartz dust)
+                </p>
+              </div>
+            )}
+            <button
+              onClick={resetGame}
+              className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Play Again
+            </button>
+          </div>
+        )}
+
+        <div className="w-full">
+          <Keyboard
+            onKeyPress={addLetter}
+            onEnter={submitGuess}
+            onBackspace={removeLetter}
+            getLetterStatus={getKeyboardLetterStatus}
+            canSubmit={canSubmit}
+            canAddLetter={canAddLetter}
+            canRemoveLetter={canRemoveLetter}
+          />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* How to Play Modal */}
+      <Modal
+        isOpen={showHowToPlay}
+        onClose={() => setShowHowToPlay(false)}
+        title="How to Play"
+      >
+        <div className="space-y-4">
+          <p>Guess the 45-letter word in 6 tries.</p>
+          <p>Each guess must be exactly 45 letters long.</p>
+          <div className="space-y-2">
+            <p><strong>Color coding:</strong></p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-green-500 rounded flex items-center justify-center text-white font-bold">A</div>
+              <span>Letter is in the word and in the correct spot</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-yellow-500 rounded flex items-center justify-center text-white font-bold">B</div>
+              <span>Letter is in the word but in the wrong spot</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gray-500 rounded flex items-center justify-center text-white font-bold">C</div>
+              <span>Letter is not in the word</span>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600">
+            <strong>Hint:</strong> The word is the longest word in most English dictionaries and refers to a lung disease!
+          </p>
+        </div>
+      </Modal>
+
+      {/* Stats Modal */}
+      <Modal
+        isOpen={showStats}
+        onClose={() => setShowStats(false)}
+        title="Statistics"
+      >
+        <div className="space-y-4">
+          <div className="grid grid-cols-4 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold">{gameStats.gamesPlayed}</div>
+              <div className="text-sm text-gray-600">Played</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">{getWinPercentage()}</div>
+              <div className="text-sm text-gray-600">Win %</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">{gameStats.currentStreak}</div>
+              <div className="text-sm text-gray-600">Current Streak</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">{gameStats.maxStreak}</div>
+              <div className="text-sm text-gray-600">Max Streak</div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="font-bold mb-2">Guess Distribution</h3>
+            <div className="space-y-1">
+              {[1, 2, 3, 4, 5, 6].map(i => {
+                const count = gameStats.guessDistribution[i] || 0
+                const maxCount = Math.max(...Object.values(gameStats.guessDistribution))
+                const width = maxCount > 0 ? (count / maxCount) * 100 : 0
+                
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="w-4 text-sm">{i}</span>
+                    <div className="flex-1 bg-gray-200 h-6 rounded">
+                      <div 
+                        className="bg-green-500 h-full rounded text-white text-xs flex items-center justify-end pr-2"
+                        style={{ width: `${Math.max(width, count > 0 ? 10 : 0)}%` }}
+                      >
+                        {count > 0 && count}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Settings Modal */}
+      <Modal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        title="Settings"
+      >
+        <div className="space-y-4">
+          <p>Settings coming soon!</p>
+          <p className="text-sm text-gray-600">
+            Future features: Dark mode, color blind mode, and more!
+          </p>
+        </div>
+      </Modal>
     </div>
-  );
+  )
 }
