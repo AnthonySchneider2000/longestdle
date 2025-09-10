@@ -70,8 +70,8 @@ export default function Home() {
         onShare={handleShare}
       />
 
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-full mx-auto w-full">
-        <div className="w-full mb-8">
+      <main className="flex-1 flex flex-col items-center justify-center py-8 max-w-full mx-auto w-full">
+        <div className="w-full mb-8 px-2">
           <GameBoard gameState={gameState} />
         </div>
 

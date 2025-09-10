@@ -68,13 +68,13 @@ export function GameBoard({ gameState, onInvalidGuess }: GameBoardProps) {
   }
 
   return (
-    <div className="w-full max-w-full overflow-x-auto touch-scroll hide-scrollbar px-2">
+    <div className="w-full max-w-full overflow-x-auto touch-scroll hide-scrollbar">
       <div 
         className="grid gap-[2px] xs:gap-1 sm:gap-2 md:gap-3 mx-auto"
         style={{
           width: 'fit-content',
-          minWidth: '100%',
-          maxWidth: '95vw'
+          maxWidth: '95vw',
+          margin: '0 auto'
         }}
       >
         {rows}
